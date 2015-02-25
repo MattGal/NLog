@@ -439,11 +439,14 @@ namespace NLog.Layouts
                 {
                     continue;
                 }
-
+#if ASPNETCORE
+                throw new NotImplementedException("TODO");
+#else
                 if (!renderable.GetType().IsDefined(typeof(AppDomainFixedOutputAttribute), false))
                 {
                     return false;
                 }
+#endif
             }
 
             return true;

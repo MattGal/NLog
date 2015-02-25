@@ -63,6 +63,9 @@ namespace NLog
         [MethodImpl(MethodImplOptions.NoInlining)]
         public new T GetCurrentClassLogger()
         {
+#if ASPNETCORE
+            return this.GetLogger("TODO ClassName 3");
+#else
 #if SILVERLIGHT
             StackFrame frame = new StackFrame(1);
 #else
@@ -70,6 +73,7 @@ namespace NLog
 #endif
 
             return this.GetLogger(frame.GetMethod().DeclaringType.FullName);
+#endif
         }
     }
 }

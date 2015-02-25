@@ -51,9 +51,15 @@ namespace NLog
     internal static class LoggerImpl
     {
         private const int StackTraceSkipMethods = 0;
+#if ASPNETCORE
+        private static readonly Assembly nlogAssembly = typeof(LoggerImpl).GetTypeInfo().Assembly;
+        private static readonly Assembly mscorlibAssembly = typeof(string).GetTypeInfo().Assembly;
+        private static readonly Assembly systemAssembly = typeof(Debug).GetTypeInfo().Assembly;
+#else
         private static readonly Assembly nlogAssembly = typeof(LoggerImpl).Assembly;
         private static readonly Assembly mscorlibAssembly = typeof(string).Assembly;
         private static readonly Assembly systemAssembly = typeof(Debug).Assembly;
+#endif
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", Justification = "Using 'NLog' in message.")]
         internal static void Write(Type loggerType, TargetWithFilterChain targets, LogEventInfo logEvent, LogFactory factory)
@@ -67,6 +73,8 @@ namespace NLog
 
             if (stu != StackTraceUsage.None && !logEvent.HasStackTrace)
             {
+                // TODO:  How to represent string-only ASP.NET Core stack traces?
+#if !ASPNETCORE
                 StackTrace stackTrace;
 #if !SILVERLIGHT
                 stackTrace = new StackTrace(StackTraceSkipMethods, stu == StackTraceUsage.WithSource);
@@ -77,6 +85,11 @@ namespace NLog
                 int firstUserFrame = FindCallingMethodOnStackTrace(stackTrace, loggerType);
 
                 logEvent.SetStackTrace(stackTrace, firstUserFrame);
+#else
+                string stackTrace = Environment.StackTrace;
+                // TODO:  Put the string into the log.
+#endif
+
             }
 
             int originalThreadId = Thread.CurrentThread.ManagedThreadId;
@@ -100,9 +113,11 @@ namespace NLog
             }
         }
 
+#if !ASPNETCORE // StackTrace / Stackframe is not present in ASPNET Core Profile.
         private static int FindCallingMethodOnStackTrace(StackTrace stackTrace, Type loggerType)
         {
             int? firstUserFrame = null;
+
 
             if (loggerType != null)
             {
@@ -147,10 +162,9 @@ namespace NLog
                     }
                 }
             }
-
             return firstUserFrame ?? 0;
         }
-
+#endif
         private static bool SkipAssembly(Assembly assembly)
         {
             if (assembly == nlogAssembly)

@@ -34,6 +34,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace NLog.Internal
 {
@@ -89,19 +90,20 @@ namespace NLog.Internal
         {
 
             var enumType = typeof(TEnum);
+
+#if ASPNETCORE
+            if (!enumType.GetTypeInfo().IsEnum)
+                throw new ArgumentException(string.Format("Type '{0}' is not an enum", enumType.FullName));
+#else
             if (!enumType.IsEnum)
                 throw new ArgumentException(string.Format("Type '{0}' is not an enum", enumType.FullName));
-            
-
-       
+#endif
 
             if (IsNullOrWhiteSpace(value))
             {
                 result = default(TEnum);
                 return false;
             }
-
-          
 
             try
             {
@@ -113,7 +115,6 @@ namespace NLog.Internal
                 result = default(TEnum);
                 return false;
             }
-
 
         }
 

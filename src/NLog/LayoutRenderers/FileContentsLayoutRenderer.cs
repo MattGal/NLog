@@ -102,10 +102,17 @@ namespace NLog.LayoutRenderers
         {
             try
             {
+#if ASPNETCORE
+                using (var reader = new StreamReader(new FileStream(fileName, FileMode.Open)))
+                {
+                    return reader.ReadToEnd();
+                }
+#else
                 using (var reader = new StreamReader(fileName, this.Encoding))
                 {
                     return reader.ReadToEnd();
                 }
+#endif
             }
             catch (Exception exception)
             {

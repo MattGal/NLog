@@ -67,8 +67,9 @@ namespace NLog
         private Timer reloadTimer;
         private readonly MultiFileWatcher watcher;       
 #endif
-
+#if !ASPNETCORE
         private static IAppDomain currentAppDomain;
+#endif
         private readonly object syncRoot = new object();
 
         private LoggingConfiguration config;
@@ -110,6 +111,7 @@ namespace NLog
             this.Configuration = config;
         }
 
+#if !ASPNETCORE
         /// <summary>
         /// Gets the current <see cref="IAppDomain"/>.
         /// </summary>
@@ -118,6 +120,7 @@ namespace NLog
             get { return currentAppDomain ?? (currentAppDomain = AppDomainWrapper.CurrentDomain); }
             set { currentAppDomain = value; }
         }
+#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether exceptions should be thrown.
@@ -154,7 +157,7 @@ namespace NLog
                     {
                         foreach (string configFile in GetCandidateConfigFileNames())
                         {
-#if SILVERLIGHT
+#if SILVERLIGHT && !ASPNETCORE
                             Uri configFileUri = new Uri(configFile, UriKind.Relative);
                             if (Application.GetResourceStream(configFileUri) != null)
                             {
@@ -319,13 +322,16 @@ namespace NLog
         [MethodImpl(MethodImplOptions.NoInlining)]
         public Logger GetCurrentClassLogger()
         {
+#if ASPNETCORE
+            return this.GetLogger("TODO FULL NAME OF CLASS 1");
+#else
 #if SILVERLIGHT
             var frame = new StackFrame(1);
 #else
             var frame = new StackFrame(1, false);
 #endif
-
             return this.GetLogger(frame.GetMethod().DeclaringType.FullName);
+#endif
         }
 
         /// <summary>
@@ -339,6 +345,9 @@ namespace NLog
         [MethodImpl(MethodImplOptions.NoInlining)]
         public Logger GetCurrentClassLogger(Type loggerType)
         {
+#if ASPNETCORE
+            return this.GetLogger("TODO FULL NAME OF CLASS", loggerType);
+#else
 #if !SILVERLIGHT
             var frame = new StackFrame(1, false);
 #else
@@ -346,6 +355,7 @@ namespace NLog
 #endif
 
             return this.GetLogger(frame.GetMethod().DeclaringType.FullName, loggerType);
+#endif
         }
 
         /// <summary>

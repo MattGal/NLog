@@ -61,8 +61,11 @@ namespace NLog.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-#if SILVERLIGHT
+#if SILVERLIGHT && !ASPNETCORE
 			var assembly = Application.Current.GetType().Assembly;
+#elif ASPNETCORE
+            // TODO:  may need to plumb this through.
+            var assembly = this.GetType().GetTypeInfo().Assembly;
 #else
             var assembly = Assembly.GetEntryAssembly();
 #endif

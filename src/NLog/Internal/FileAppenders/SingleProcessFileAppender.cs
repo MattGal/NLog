@@ -108,7 +108,11 @@ namespace NLog.Internal.FileAppenders
             }
 
             InternalLogger.Trace("Closing '{0}'", FileName);
+#if ASPNETCORE
+            this.file.Dispose();
+#else
             this.file.Close();
+#endif
             this.file = null;
         }
 

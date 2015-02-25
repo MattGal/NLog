@@ -35,6 +35,9 @@ namespace NLog.Internal
 {
     using System;
     using System.Threading;
+#if ASPNETCORE
+    using System.Reflection;
+#endif
 
     /// <summary>
     /// Helper class for dealing with exceptions.
@@ -48,16 +51,16 @@ namespace NLog.Internal
         /// <returns>True if the exception must be rethrown, false otherwise.</returns>
         public static bool MustBeRethrown(this Exception exception)
         {
+#if !ASPNETCORE
             if (exception is StackOverflowException)
             {
                 return true;
             }
-
             if (exception is ThreadAbortException)
             {
                 return true;
             }
-
+#endif 
             if (exception is OutOfMemoryException)
             {
                 return true;
@@ -67,8 +70,11 @@ namespace NLog.Internal
             {
                 return true;
             }
-
+#if ASPNETCORE
+            if (exception.GetType().GetTypeInfo().IsSubclassOf(typeof(NLogConfigurationException)))
+#else
             if (exception.GetType().IsSubclassOf(typeof(NLogConfigurationException)))
+#endif
             {
                 return true;
             }

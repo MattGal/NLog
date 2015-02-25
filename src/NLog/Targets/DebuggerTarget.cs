@@ -64,7 +64,11 @@ namespace NLog.Targets
             base.InitializeTarget();
             if (Header != null)
             {
+#if ASPNETCORE
+                Debug.WriteLine(Header.Render(LogEventInfo.CreateNullEvent()) + "\n");
+#else
                 Debugger.Log(LogLevel.Off.Ordinal, string.Empty, Header.Render(LogEventInfo.CreateNullEvent()) + "\n");
+#endif
             }
         }
 
@@ -75,7 +79,11 @@ namespace NLog.Targets
         {
             if (Footer != null)
             {
+#if ASPNETCORE
+                Debug.WriteLine(Header.Render(LogEventInfo.CreateNullEvent()) + "\n");
+#else
                 Debugger.Log(LogLevel.Off.Ordinal, string.Empty, Footer.Render(LogEventInfo.CreateNullEvent()) + "\n");
+#endif
             }
 
             base.CloseTarget();
@@ -87,10 +95,17 @@ namespace NLog.Targets
         /// <param name="logEvent">The logging event.</param>
         protected override void Write(LogEventInfo logEvent)
         {
+#if ASPNETCORE
+            if (Debugger.IsAttached)
+            {
+                Debug.WriteLine( logEvent.LoggerName + " : " + this.Layout.Render(logEvent) + "\n");
+            }
+#else
             if (Debugger.IsLogging())
             {
                 Debugger.Log(logEvent.Level.Ordinal, logEvent.LoggerName, this.Layout.Render(logEvent) + "\n");
             }
+#endif
         }
     }
 }

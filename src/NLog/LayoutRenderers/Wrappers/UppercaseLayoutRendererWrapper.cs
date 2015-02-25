@@ -75,7 +75,11 @@ namespace NLog.LayoutRenderers.Wrappers
         /// <returns>Padded and trimmed string.</returns>
         protected override string Transform(string text)
         {
+#if ASPNETCORE
+            return this.Uppercase ? CultureInfo.CurrentCulture.TextInfo.ToUpper(text) : text;
+#else
             return this.Uppercase ? text.ToUpper(this.Culture) : text;
+#endif
         }
     }
 }

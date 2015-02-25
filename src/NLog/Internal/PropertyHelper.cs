@@ -144,7 +144,11 @@ namespace NLog.Internal
 
         internal static Type GetArrayItemType(PropertyInfo propInfo)
         {
+#if ASPNETCORE
+            var arrayParameterAttribute = (ArrayParameterAttribute)propInfo.GetCustomAttribute(typeof(ArrayParameterAttribute));
+#else
             var arrayParameterAttribute = (ArrayParameterAttribute)Attribute.GetCustomAttribute(propInfo, typeof(ArrayParameterAttribute));
+#endif
             if (arrayParameterAttribute != null)
             {
                 return arrayParameterAttribute.ItemType;
@@ -176,7 +180,11 @@ namespace NLog.Internal
 
         private static bool TryImplicitConversion(Type resultType, string value, out object result)
         {
+#if ASPNETCORE
+            MethodInfo operatorImplicitMethod = resultType.GetMethod("op_Implicit", new Type[] { typeof(string) });
+#else
             MethodInfo operatorImplicitMethod = resultType.GetMethod("op_Implicit", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string) }, null);
+#endif
             if (operatorImplicitMethod == null)
             {
                 result = null;
@@ -207,13 +215,20 @@ namespace NLog.Internal
 
         private static bool TryGetEnumValue(Type resultType, string value, out object result)
         {
+#if ASPNETCORE
+            if (!resultType.GetTypeInfo().IsEnum)
+#else
             if (!resultType.IsEnum)
+#endif
             {
                 result = null;
                 return false;
             }
-
+#if ASPNETCORE
+            if (resultType.GetTypeInfo().IsDefined(typeof(FlagsAttribute), false))
+#else
             if (resultType.IsDefined(typeof(FlagsAttribute), false))
+#endif
             {
                 ulong union = 0;
 
@@ -307,8 +322,11 @@ namespace NLog.Internal
             var retVal = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
             foreach (PropertyInfo propInfo in GetAllReadableProperties(t))
             {
+#if ASPNETCORE
+                var arrayParameterAttribute = (ArrayParameterAttribute)propInfo.GetCustomAttribute(typeof(ArrayParameterAttribute));
+#else
                 var arrayParameterAttribute = (ArrayParameterAttribute)Attribute.GetCustomAttribute(propInfo, typeof(ArrayParameterAttribute));
-
+#endif
                 if (arrayParameterAttribute != null)
                 {
                     retVal[arrayParameterAttribute.ElementName] = propInfo;

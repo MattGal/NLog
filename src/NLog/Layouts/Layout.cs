@@ -36,6 +36,10 @@ namespace NLog.Layouts
     using System.ComponentModel;
     using NLog.Config;
     using NLog.Internal;
+#if ASPNETCORE
+    using System.Reflection;
+#endif
+
 
     /// <summary>
     /// Abstract interface that layouts must implement.
@@ -164,7 +168,11 @@ namespace NLog.Layouts
                 this.threadAgnostic = true;
                 foreach (object item in ObjectGraphScanner.FindReachableObjects<object>(this))
                 {
+#if ASPNETCORE
+                    if (!item.GetType().GetTypeInfo().IsDefined(typeof(ThreadAgnosticAttribute), true))
+#else
                     if (!item.GetType().IsDefined(typeof(ThreadAgnosticAttribute), true))
+#endif
                     {
                         this.threadAgnostic = false;
                         break;

@@ -81,7 +81,11 @@ namespace NLog.Internal.FileAppenders
         {
             if (this.file != null)
             {
+#if ASPNETCORE
+                this.file.Dispose();
+#else
                 this.file.Close();
+#endif
                 this.file = null;
             }
         }

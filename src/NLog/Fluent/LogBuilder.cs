@@ -251,6 +251,7 @@ namespace NLog.Fluent
             return this;
         }
 
+#if !ASPNETCORE
         /// <summary>
         /// Sets the stack trace for the event info.
         /// </summary>
@@ -262,6 +263,7 @@ namespace NLog.Fluent
             _logEvent.SetStackTrace(stackTrace, userStackFrame);
             return this;
         }
+#endif
 
 #if NET4_5
         /// <summary>

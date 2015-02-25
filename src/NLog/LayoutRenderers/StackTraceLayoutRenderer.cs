@@ -101,6 +101,9 @@ namespace NLog.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
+#if ASPNETCORE
+            builder.Append(logEvent.StackTrace);
+#else
             bool first = true;
             int startingFrame = logEvent.UserStackFrameNumber + this.TopFrames - 1;
             if (startingFrame >= logEvent.StackTrace.FrameCount)
@@ -164,6 +167,7 @@ namespace NLog.LayoutRenderers
 
                     break;
             }
+#endif
         }
     }
 }

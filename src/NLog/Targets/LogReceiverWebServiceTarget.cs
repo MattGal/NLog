@@ -42,7 +42,7 @@ namespace NLog.Targets
     using System.ServiceModel.Channels;
 #endif
     using System.Threading;
-#if SILVERLIGHT
+#if SILVERLIGHT && !ASPNETCORE
     using System.Windows;
     using System.Windows.Threading;
 #endif
@@ -284,7 +284,7 @@ namespace NLog.Targets
                 };
 
             this.inCall = true;
-#if SILVERLIGHT
+#if SILVERLIGHT && !ASPNETCORE
             if (!Deployment.Current.Dispatcher.CheckAccess())
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() => client.ProcessLogMessagesAsync(events));

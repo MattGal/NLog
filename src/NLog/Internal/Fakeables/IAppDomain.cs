@@ -41,7 +41,7 @@ namespace NLog.Internal.Fakeables
     /// </summary>
     public interface IAppDomain
     {
-#if !SILVERLIGHT
+#if !SILVERLIGHT 
         /// <summary>
         /// Gets or sets the base directory that the assembly resolver uses to probe for assemblies.
         /// </summary>

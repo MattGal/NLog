@@ -231,7 +231,11 @@ namespace NLog.Config
         /// <returns>Default factory.</returns>
         private static ConfigurationItemFactory BuildDefaultFactory()
         {
+#if ASPNETCORE
+            var nlogAssembly = typeof(ILogger).GetTypeInfo().Assembly;
+#else
             var nlogAssembly = typeof(ILogger).Assembly;
+#endif
             var factory = new ConfigurationItemFactory(nlogAssembly);
             factory.RegisterExtendedItems();
 #if !SILVERLIGHT
@@ -242,7 +246,7 @@ namespace NLog.Config
             }
 
             var extensionDlls = Directory.GetFiles(assemblyLocation, "NLog*.dll")
-                .Select(Path.GetFileName)
+                .Select(x => Path.GetFileName(x))
                 .Where(x => !x.Equals("NLog.dll", StringComparison.OrdinalIgnoreCase))
                 .Where(x => !x.Equals("NLog.UnitTests.dll", StringComparison.OrdinalIgnoreCase))
                 .Where(x => !x.Equals("NLog.Extended.dll", StringComparison.OrdinalIgnoreCase))

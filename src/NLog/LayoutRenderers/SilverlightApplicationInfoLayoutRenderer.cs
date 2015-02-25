@@ -30,7 +30,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
-
+#if !ASPNETCORE
 #if (SILVERLIGHT || DOCUMENTATION)
 
 namespace NLog.LayoutRenderers
@@ -97,4 +97,5 @@ namespace NLog.LayoutRenderers
     }
 }
 
+#endif
 #endif

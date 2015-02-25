@@ -78,6 +78,8 @@ namespace NLog.Internal
         
         private static RuntimeOS GetCurrentRuntimeOS()
         {
+            // TODO:  If needed can add PInvokes to OsVersionInfo API
+#if !ASPNETCORE
             PlatformID platformID = Environment.OSVersion.Platform;
             if ((int)platformID == 4 || (int)platformID == 128)
             {
@@ -98,7 +100,7 @@ namespace NLog.Internal
             {
                 return RuntimeOS.WindowsNT;
             }
-
+#endif
             return RuntimeOS.Unknown;
         }
     }

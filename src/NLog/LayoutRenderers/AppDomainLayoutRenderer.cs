@@ -31,6 +31,8 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
+#if !ASPNETCORE // Core Framework does not provide access to AppDomain.
+
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -87,7 +89,10 @@ namespace NLog.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var formattingString = GetFormattingString(Format);
+            // Moved this to unblock build.  
+    #if !SILVERLIGHT
             builder.Append(string.Format(formattingString, _currentDomain.Id, _currentDomain.FriendlyName));
+    #endif
         }
 
         /// <summary>
@@ -115,3 +120,4 @@ namespace NLog.LayoutRenderers
         }
     }
 }
+#endif

@@ -44,6 +44,10 @@ namespace NLog
     using NLog.Internal;
     using NLog.Layouts;
     using NLog.Time;
+#if ASPNETCORE
+    using System.Reflection;
+#endif
+
 
     /// <summary>
     /// Represents the logging event.
@@ -150,6 +154,8 @@ namespace NLog
             get { return this.StackTrace != null; }
         }
 
+#if ASPNETCORE
+#else
         /// <summary>
         /// Gets the stack frame of the method that did the logging.
         /// </summary>
@@ -157,6 +163,7 @@ namespace NLog
         {
             get { return (this.StackTrace != null) ? this.StackTrace.GetFrame(this.UserStackFrameNumber) : null; }
         }
+#endif
 
         /// <summary>
         /// Gets the number index of the stack frame that represents the user
@@ -164,10 +171,14 @@ namespace NLog
         /// </summary>
         public int UserStackFrameNumber { get; private set; }
 
+#if ASPNETCORE
+        public string StackTrace { get; private set; }
+#else
         /// <summary>
         /// Gets the entire stack trace.
         /// </summary>
         public StackTrace StackTrace { get; private set; }
+#endif
 
         /// <summary>
         /// Gets or sets the exception information.
@@ -370,6 +381,7 @@ namespace NLog
             return "Log Event: Logger='" + this.LoggerName + "' Level=" + this.Level + " Message='" + this.FormattedMessage + "' SequenceID=" + this.SequenceID;
         }
 
+#if !ASPNETCORE
         /// <summary>
         /// Sets the stack trace for the event info.
         /// </summary>
@@ -380,7 +392,7 @@ namespace NLog
             this.StackTrace = stackTrace;
             this.UserStackFrameNumber = userStackFrame;
         }
-
+#endif
         internal string AddCachedLayoutValue(Layout layout, string value)
         {
             lock (this.layoutCacheLock)
@@ -455,8 +467,11 @@ namespace NLog
             {
                 return true;
             }
-
+#if ASPNETCORE
+            return value.GetType().GetTypeInfo().IsPrimitive || (value is string);
+#else
             return value.GetType().IsPrimitive || (value is string);
+#endif
         }
 
         private void CalcFormattedMessage()

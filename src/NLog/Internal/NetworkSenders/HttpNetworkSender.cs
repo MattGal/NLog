@@ -61,6 +61,8 @@ namespace NLog.Internal.NetworkSenders
         /// <remarks>To be overridden in inheriting classes.</remarks>
         protected override void DoSend(byte[] bytes, int offset, int length, AsyncContinuation asyncContinuation)
         {
+            // TODO: Rewrite using HttpClient.
+#if !ASPNETCORE
             var webRequest = WebRequest.Create(new Uri(this.Address));
             webRequest.Method = "POST";
 
@@ -111,6 +113,7 @@ namespace NLog.Internal.NetworkSenders
                 };
 
             webRequest.BeginGetRequestStream(onRequestStream, null);
+#endif
         }
     }
 }

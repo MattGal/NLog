@@ -130,6 +130,10 @@ namespace NLog.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
+#if ASPNETCORE
+            {
+            builder.Append("TODO: CallSiteLayoutRenderer \n" + System.Environment.StackTrace);
+#else
             StackFrame frame = logEvent.StackTrace != null ? logEvent.StackTrace.GetFrame(logEvent.UserStackFrameNumber + SkipFrames) : null;
             if (frame != null)
             {
@@ -190,7 +194,7 @@ namespace NLog.LayoutRenderers
                         builder.Append("<no method>");
                     }
                 }
-
+#endif
 #if !SILVERLIGHT
                 if (this.FileName)
                 {

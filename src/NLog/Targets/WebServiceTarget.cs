@@ -131,6 +131,7 @@ namespace NLog.Targets
         /// <param name="continuation">The continuation.</param>
         protected override void DoInvoke(object[] parameters, AsyncContinuation continuation)
         {
+#if !ASPNETCORE
             var request = (HttpWebRequest)WebRequest.Create(this.Url);
             byte[] postPayload = null;
 
@@ -216,8 +217,11 @@ namespace NLog.Targets
             {
                 sendContinuation(null);
             }
+#else
+            // TODO: Rewrite using HttpClient.
+#endif
         }
-
+#if !ASPNETCORE
         private byte[] PrepareSoap11Request(HttpWebRequest request, object[] parameters)
         {
             request.Method = "POST";
@@ -320,5 +324,6 @@ namespace NLog.Targets
                 return ms.ToArray();
             }
         }
+#endif
     }
 }

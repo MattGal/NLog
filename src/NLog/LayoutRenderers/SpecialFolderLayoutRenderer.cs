@@ -38,6 +38,7 @@ namespace NLog.LayoutRenderers
     using System.Text;
     using NLog.Config;
 
+
     /// <summary>
     /// System special folder path (includes My Documents, My Music, Program Files, Desktop, and more).
     /// </summary>
@@ -63,8 +64,11 @@ namespace NLog.LayoutRenderers
         /// </remarks>
         /// <docgen category='Rendering Options' order='10' />
         [DefaultParameter]
+#if ASPNETCORE
+        public NLog.CoreClrHelpers.Environment.SpecialFolder Folder { get; set; }
+#else
         public Environment.SpecialFolder Folder { get; set; }
-
+#endif
         /// <summary>
         /// Gets or sets the name of the file to be Path.Combine()'d with the directory name.
         /// </summary>
@@ -84,8 +88,11 @@ namespace NLog.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
+#if ASPNETCORE
+            string outputPath = NLog.CoreClrHelpers.Environment.GetFolderPath(this.Folder);
+#else
             string outputPath = Environment.GetFolderPath(this.Folder);
-
+#endif
             if (this.Dir != null)
             {
                 outputPath = Path.Combine(outputPath, this.Dir);

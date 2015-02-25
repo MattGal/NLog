@@ -275,7 +275,7 @@ namespace NLog.LayoutRenderers
 
             foreach (string s in parts)
             {
-                switch (s.ToUpper(CultureInfo.InvariantCulture))
+                switch (s.ToUpperInvariant())
                 {
                     case "MESSAGE":
                         dataTargets.Add(AppendMessage);

@@ -71,7 +71,11 @@ namespace NLog.Internal.NetworkSenders
         /// </summary>
         public void Close()
         {
+#if ASPNETCORE
+            this.socket.Dispose();
+#else
             this.socket.Close();
+#endif
         }
 
 #if USE_LEGACY_ASYNC_API

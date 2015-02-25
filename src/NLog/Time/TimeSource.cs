@@ -35,6 +35,9 @@ namespace NLog.Time
 {
     using System;
     using NLog.Config;
+#if ASPNETCORE
+    using System.Reflection;
+#endif
 
     /// <summary>
     /// Defines source of current time.
@@ -69,7 +72,11 @@ namespace NLog.Time
         /// </returns>
         public override string ToString()
         {
+#if ASPNETCORE
+            var targetAttribute = (TimeSourceAttribute)this.GetType().GetTypeInfo().GetCustomAttribute(typeof(TimeSourceAttribute));
+#else
             var targetAttribute = (TimeSourceAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(TimeSourceAttribute));
+#endif
             if (targetAttribute != null)
             {
                 return targetAttribute.Name + " (time source)";

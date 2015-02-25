@@ -37,6 +37,9 @@ namespace NLog.Config
     using System.Collections.Generic;
     using NLog.Common;
     using NLog.Internal;
+#if ASPNETCORE
+    using System.Reflection;
+#endif
 
     /// <summary>
     /// Factory for class-based items.
@@ -89,7 +92,11 @@ namespace NLog.Config
         /// <param name="itemNamePrefix">The item name prefix.</param>
         public void RegisterType(Type type, string itemNamePrefix)
         {
+#if ASPNETCORE
+            TAttributeType[] attributes = (TAttributeType[])type.GetTypeInfo().GetCustomAttributes(typeof(TAttributeType), false);
+#else
             TAttributeType[] attributes = (TAttributeType[])type.GetCustomAttributes(typeof(TAttributeType), false);
+#endif
             if (attributes != null)
             {
                 foreach (TAttributeType attr in attributes)

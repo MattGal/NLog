@@ -76,8 +76,11 @@ namespace NLog.Internal
             {
                 return;
             }
-
+#if ASPNETCORE
+            if (!o.GetType().GetTypeInfo().IsDefined(typeof(NLogConfigurationItemAttribute), true))
+#else
             if (!o.GetType().IsDefined(typeof(NLogConfigurationItemAttribute), true))
+#endif
             {
                 return;
             }
@@ -102,7 +105,12 @@ namespace NLog.Internal
 
             foreach (PropertyInfo prop in PropertyHelper.GetAllReadableProperties(o.GetType()))
             {
+#if ASPNETCORE
+                if (prop.PropertyType.GetTypeInfo().IsPrimitive || prop.PropertyType.GetTypeInfo().IsEnum || prop.PropertyType == typeof(string) || prop.IsDefined(typeof(NLogConfigurationIgnorePropertyAttribute), true))
+#else
                 if (prop.PropertyType.IsPrimitive || prop.PropertyType.IsEnum || prop.PropertyType == typeof(string) || prop.IsDefined(typeof(NLogConfigurationIgnorePropertyAttribute), true))
+#endif
+
                 {
                     continue;
                 }

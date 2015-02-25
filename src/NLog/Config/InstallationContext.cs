@@ -156,7 +156,11 @@ namespace NLog.Config
         {
             if (this.LogOutput != null)
             {
+#if !ASPNETCORE
                 this.LogOutput.Close();
+#else
+                this.LogOutput.Dispose();
+#endif
                 this.LogOutput = null;
             }
         }

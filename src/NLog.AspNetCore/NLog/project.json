@@ -1,0 +1,108 @@
+﻿{
+    "version": "3.2.0-*",
+
+    // Could use more wildcards here but being explicit in case
+    // new files are added.
+    "code": [
+        "**/*.cs",
+        "../../NLog/Common/**/*.cs",
+        "../../NLog/Conditions/**/*.cs",
+        "../../NLog/Config/**/*.cs",
+        "../../NLog/Filters/**/*.cs",
+        "../../NLog/Fluent/**/*.cs",
+        "../../NLog/Internal/**/*.cs",
+        "../../NLog/LayoutRenderers/**/*.cs",
+        "../../NLog/Layouts/**/*.cs",
+        "../../NLog/LogReceiverService/**/*.cs",
+        "../../NLog/Targets/**/*.cs",
+        "../../NLog/Time/**/*.cs",
+        "../../NLog/Annotations.cs",
+        "../../NLog/GDC.cs",
+        "../../NLog/GlobalDiagnosticsContext.cs",
+        "../../NLog/GlobalSuppressions.cs",
+        "../../NLog/ILogger-V1.cs",
+        "../../NLog/ILogger.cs",
+        "../../NLog/ILoggerBase-V1.cs",
+        "../../NLog/ILoggerBase.cs",
+        "../../NLog/ISuppress.cs",
+        "../../NLog/LogEventInfo.cs",
+        "../../NLog/LogFactory-T.cs",
+        "../../NLog/LogFactory.cs",
+        "../../NLog/Logger-V1Compat.cs",
+        "../../NLog/Logger.cs",
+        "../../NLog/LoggerImpl.cs",
+        "../../NLog/LogLevel.cs",
+        "../../NLog/LogManager.cs",
+        "../../NLog/LogMessageGenerator.cs",
+        "../../NLog/MappedDiagnosticsContext.cs",
+        "../../NLog/MDC.cs",
+        "../../NLog/NDC.cs",
+        "../../NLog/NestedDiagnosticsContext.cs",
+        "../../NLog/NLogConfigurationException.cs",
+        "../../NLog/NLogRuntimeException.cs",
+        "../../NLog/NLogTraceListener.cs"
+    ],
+
+
+    "dependencies": {
+    },
+    "frameworks": {
+        "net35": {
+            "bin": {
+                "assembly": "../../../build/bin/Release/.NET Framework 3.5/NLog.dll",
+                "pdb": "../../../build/bin/Release/.NET Framework 3.5/NLog.pdb"
+            }
+        },
+        "net40": {
+            "bin": {
+                "assembly": "../../../build/bin/Release/.NET Framework 4.0/NLog.dll",
+                "pdb": "../../../build/bin/Release/.NET Framework 4.0/NLog.pdb"
+            }
+        },
+        "net45": {
+            "bin": {
+                "assembly": "../../../build/bin/Release/.NET Framework 4.5/NLog.dll",
+                "pdb": "../../../build/bin/Release/.NET Framework 4.5/NLog.pdb"
+            }
+        },
+        // Currently having difficulty building SL4 package, leaving it out for now.
+        "sl5": {
+            "bin": {
+                "assembly": "../../../build/bin/Release/Silverlight 5.0/NLog.dll",
+                "pdb": "../../../build/bin/Release/Silverlight 5.0/NLog.pdb"
+            }
+        },
+        "aspnetcore50": {
+            "compilationOptions": {
+                "define": [ "SILVERLIGHT", "SILVERLIGHT5", "WCF_SUPPORTED", "ASPNETCORE" ]
+            },
+            "dependencies": {
+                "System.Console": "4.0.0-beta-22616",
+                "System.Collections": "4.0.10-beta-22616",
+                "System.Diagnostics.Debug": "4.0.10-beta-22616",
+                "System.Diagnostics.Tools": "4.0.0-beta-22616",
+                "System.Globalization": "4.0.10-beta-22616",
+                "System.Globalization.Extensions": "4.0.0-beta-22620",
+                "System.IO": "4.0.10-beta-22620",
+                "System.IO.FileSystem": "4.0.0-beta-22620",
+                "System.Linq": "4.0.0-beta-22616",
+                "System.Net.Primitives": "4.0.10-beta-22620",
+                "System.Net.Sockets": "4.0.0-beta-22620",
+                "System.Reflection": "4.0.10-beta-22620",
+                "System.Reflection.Extensions": "4.0.0-beta-22620",
+                "System.Reflection.TypeExtensions": "4.0.0-beta-22616",
+                "System.Runtime": "4.0.20-beta-22620",
+                "System.Runtime.Extensions": "4.0.10-beta-22616",
+                "System.ServiceModel.Primitives": "4.0.0-beta-22620",
+                "System.ServiceModel.Http": "4.0.10-beta-22620",
+                "System.Text.RegularExpressions": "4.0.10-beta-22616",
+                "System.Threading": "4.0.10-beta-22616",
+                "System.Threading.Thread": "4.0.0-beta-22616",
+                "System.Threading.ThreadPool": "4.0.10-beta-22616",
+                "System.Threading.Timer": "4.0.0-beta-22616",
+                "System.Xml.XmlSerializer": "4.0.10-beta-22616"
+
+            }
+        }
+    }
+    }

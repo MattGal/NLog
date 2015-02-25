@@ -50,7 +50,9 @@ namespace NLog
     public sealed class LogManager
     {
         private static readonly LogFactory factory = new LogFactory();
+#if !ASPNETCORE
         private static IAppDomain currentAppDomain;
+#endif
         private static readonly System.Collections.Generic.List<System.Reflection.Assembly> _hiddenAssemblies = new System.Collections.Generic.List<System.Reflection.Assembly>();
 
         /// <summary>
@@ -106,6 +108,7 @@ namespace NLog
             set { factory.ThrowExceptions = value; }
         }
 
+#if !ASPNETCORE
         internal static IAppDomain CurrentAppDomain
         {
             get { return currentAppDomain ?? (currentAppDomain = AppDomainWrapper.CurrentDomain); }
@@ -118,6 +121,7 @@ namespace NLog
                 currentAppDomain = value;
             }
         }
+#endif
 
         /// <summary>
         /// Gets or sets the current logging configuration.
@@ -346,13 +350,16 @@ namespace NLog
         /// </summary>
         private static string GetClassFullName()
         {
+#if ASPNETCORE
+            return "TODO:  ClassFullName needs stack frame support";
+#else
             string className;
             Type declaringType;
             int framesToSkip = 2;
 
             do
             {
-#if SILVERLIGHT
+#if SILVERLIGHT && !ASPNETCORE
                 StackFrame frame = new StackTrace().GetFrame(framesToSkip);
 #else
                 StackFrame frame = new StackFrame(framesToSkip, false);
@@ -370,7 +377,9 @@ namespace NLog
             } while (declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase));
 
             return className;
+#endif
         }
+
 
 #if !SILVERLIGHT && !MONO
         private static void SetupTerminationEvents()

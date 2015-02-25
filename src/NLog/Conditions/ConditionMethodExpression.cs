@@ -39,7 +39,9 @@ namespace NLog.Conditions
     using System.Reflection;
     using System.Text;
     using NLog.Common;
-
+#if ASPNETCORE
+    using NLog.CoreClrHelpers;
+#endif
     /// <summary>
     /// Condition method invocation expression (represented by <b>method(p1,p2,p3)</b> syntax).
     /// </summary>
@@ -168,6 +170,11 @@ namespace NLog.Conditions
                 callParameters[0] = context;
             }
 
+#if ASPNETCORE
+            return this.MethodInfo.DeclaringType.InvokeMember(
+                MethodInfo.Name,
+                BindingFlags.Static | BindingFlags.Public, callParameters);
+#else
             return this.MethodInfo.DeclaringType.InvokeMember( 
                 MethodInfo.Name, 
                 BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.Public | BindingFlags.OptionalParamBinding, 
@@ -178,6 +185,7 @@ namespace NLog.Conditions
                 , CultureInfo.InvariantCulture
 #endif
                 );
+#endif
         }
     }
 }

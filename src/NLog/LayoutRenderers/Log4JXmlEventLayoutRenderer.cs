@@ -58,13 +58,25 @@ namespace NLog.LayoutRenderers
 
         private static readonly string dummyNLogNamespace = "http://nlog-project.org/dummynamespace/" + Guid.NewGuid();
 
+#if ASPNETCORE
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Log4JXmlEventLayoutRenderer" /> class.
+        /// </summary>
+        public Log4JXmlEventLayoutRenderer() 
+        {
+            this.IncludeNLogData = true;
+            this.NdcItemSeparator = " ";
+            this.AppInfo = "ASP.NET Core application";
+            this.Parameters = new List<NLogViewerParameterInfo>();
+        }
+#else
         /// <summary>
         /// Initializes a new instance of the <see cref="Log4JXmlEventLayoutRenderer" /> class.
         /// </summary>
         public Log4JXmlEventLayoutRenderer() : this(AppDomainWrapper.CurrentDomain)
         {
         }
-        
+      
         /// <summary>
         /// Initializes a new instance of the <see cref="Log4JXmlEventLayoutRenderer" /> class.
         /// </summary>
@@ -85,7 +97,7 @@ namespace NLog.LayoutRenderers
 
             this.Parameters = new List<NLogViewerParameterInfo>();
         }
-
+#endif
         /// <summary>
         /// Gets or sets a value indicating whether to include NLog-specific extensions to log4j schema.
         /// </summary>
@@ -184,7 +196,7 @@ namespace NLog.LayoutRenderers
                 xtw.WriteStartElement("log4j", "event", dummyNamespace);
                 xtw.WriteAttributeSafeString("xmlns", "nlog", null, dummyNLogNamespace);
                 xtw.WriteAttributeSafeString("logger", logEvent.LoggerName);
-                xtw.WriteAttributeSafeString("level", logEvent.Level.Name.ToUpper(CultureInfo.InvariantCulture));
+                xtw.WriteAttributeSafeString("level", logEvent.Level.Name.ToUpperInvariant());
                 xtw.WriteAttributeSafeString("timestamp", Convert.ToString((long)(logEvent.TimeStamp.ToUniversalTime() - log4jDateBase).TotalMilliseconds, CultureInfo.InvariantCulture));
                 xtw.WriteAttributeSafeString("thread", System.Threading.Thread.CurrentThread.ManagedThreadId.ToString(CultureInfo.InvariantCulture));
 
@@ -205,7 +217,8 @@ namespace NLog.LayoutRenderers
                     xtw.WriteSafeCData(logEvent.Exception.ToString());
                     xtw.WriteEndElement();
                 }
-
+                // TODO:  Can possibly fake up some of this using Environment.StackTrace.
+#if !ASPNETCORE
                 if (this.IncludeCallSite || this.IncludeSourceInfo)
                 {
                     System.Diagnostics.StackFrame frame = logEvent.UserStackFrame;
@@ -254,7 +267,7 @@ namespace NLog.LayoutRenderers
                         
                     }
                 }
-
+#endif
                 xtw.WriteStartElement("log4j", "properties", dummyNamespace);
                 if (this.IncludeMdc)
                 {

@@ -328,8 +328,7 @@ namespace NLog.Config
         private void ParseTopLevel(NLogXmlElement content, string baseDirectory)
         {
             content.AssertName("nlog", "configuration");
-
-            switch (content.LocalName.ToUpper(CultureInfo.InvariantCulture))
+            switch (content.LocalName.ToUpperInvariant())
             {
                 case "CONFIGURATION":
                     this.ParseConfigurationElement(content, baseDirectory);
@@ -371,7 +370,7 @@ namespace NLog.Config
 
             foreach (var el in nlogElement.Children)
             {
-                switch (el.LocalName.ToUpper(CultureInfo.InvariantCulture))
+                switch (el.LocalName.ToUpperInvariant())
                 {
                     case "EXTENSIONS":
                         this.ParseExtensionsElement(el, baseDirectory);
@@ -502,7 +501,7 @@ namespace NLog.Config
 
             foreach (var child in loggerElement.Children)
             {
-                switch (child.LocalName.ToUpper(CultureInfo.InvariantCulture))
+                switch (child.LocalName.ToUpperInvariant())
                 {
                     case "FILTERS":
                         this.ParseFilters(rule, child);
@@ -554,7 +553,7 @@ namespace NLog.Config
                 string name = targetElement.LocalName;
                 string type = StripOptionalNamespacePrefix(targetElement.GetOptionalAttribute("type", null));
 
-                switch (name.ToUpper(CultureInfo.InvariantCulture))
+                switch (name.ToUpperInvariant())
                 {
                     case "DEFAULT-WRAPPER":
                         defaultWrapperElement = targetElement;
@@ -723,16 +722,19 @@ namespace NLog.Config
                 {
                     try
                     {
-#if SILVERLIGHT
-                                var si = Application.GetResourceStream(new Uri(assemblyFile, UriKind.Relative));
-                                var assemblyPart = new AssemblyPart();
-                                Assembly asm = assemblyPart.Load(si.Stream);
+#if SILVERLIGHT && !ASPNETCORE
+                        var si = Application.GetResourceStream(new Uri(assemblyFile, UriKind.Relative));
+                        var assemblyPart = new AssemblyPart();
+                        Assembly asm = assemblyPart.Load(si.Stream);
 #else
-
                         string fullFileName = Path.Combine(baseDirectory, assemblyFile);
                         InternalLogger.Info("Loading assembly file: {0}", fullFileName);
 
+#if ASPNETCORE
+                        Assembly asm = NLog.CoreClrHelpers.AssemblyHelpers.LoadFromPath(fullFileName);
+#else
                         Assembly asm = Assembly.LoadFrom(fullFileName);
+#endif
 #endif
                         this.configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
                     }
@@ -759,14 +761,15 @@ namespace NLog.Config
                     try
                     {
                         InternalLogger.Info("Loading assembly name: {0}", assemblyName);
-#if SILVERLIGHT
+#if SILVERLIGHT && !ASPNETCORE
                         var si = Application.GetResourceStream(new Uri(assemblyName + ".dll", UriKind.Relative));
                         var assemblyPart = new AssemblyPart();
                         Assembly asm = assemblyPart.Load(si.Stream);
+#elif ASPNETCORE
+                        Assembly asm = Assembly.Load(new AssemblyName(assemblyName));
 #else
                         Assembly asm = Assembly.Load(assemblyName);
 #endif
-
                         this.configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
                     }
                     catch (Exception exception)
@@ -803,7 +806,7 @@ namespace NLog.Config
                     newFileName = Path.Combine(baseDirectory, newFileName);
                 }
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !ASPNETCORE
                 newFileName = newFileName.Replace("\\", "/");
                 if (Application.GetResourceStream(new Uri(newFileName, UriKind.Relative)) != null)
 #else

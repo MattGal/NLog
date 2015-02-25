@@ -195,12 +195,12 @@ namespace NLog.LogReceiverService
             }
         }
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !ASPNETCORE
         /// <summary>
         /// Gets or sets the cookie container.
         /// </summary>
         /// <value>The cookie container.</value>
-        public CookieContainer CookieContainer
+        public System.Net.CookieContainer CookieContainer
         {
             get
             {

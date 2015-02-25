@@ -41,6 +41,9 @@ namespace NLog.Targets
     using NLog.Config;
     using NLog.Internal;
     using NLog.Layouts;
+#if ASPNETCORE
+    using System.Reflection;
+#endif
 
     /// <summary>
     /// Represents logging target.
@@ -168,7 +171,11 @@ namespace NLog.Targets
         /// </returns>
         public override string ToString()
         {
+#if ASPNETCORE
+            var targetAttribute = (TargetAttribute)this.GetType().GetTypeInfo().GetCustomAttribute(typeof(TargetAttribute));            
+#else
             var targetAttribute = (TargetAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(TargetAttribute));
+#endif
             if (targetAttribute != null)
             {
                 return targetAttribute.Name + " Target[" + (this.Name ?? "(unnamed)") + "]";

@@ -34,6 +34,7 @@
 namespace NLog.LayoutRenderers
 {
     using System;
+    using System.Reflection;
     using System.Text;
     using NLog.Common;
     using NLog.Config;
@@ -62,7 +63,11 @@ namespace NLog.LayoutRenderers
         /// </returns>
         public override string ToString()
         {
+#if ASPNETCORE
+            var lra = (LayoutRendererAttribute)this.GetType().GetTypeInfo().GetCustomAttribute(typeof(LayoutRendererAttribute));
+#else
             var lra = (LayoutRendererAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(LayoutRendererAttribute));
+#endif
             if (lra != null)
             {
                 return "Layout Renderer: ${" + lra.Name + "}";

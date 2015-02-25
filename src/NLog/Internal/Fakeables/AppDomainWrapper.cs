@@ -31,6 +31,8 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 // 
 
+#if !ASPNETCORE // Core Framework does not provide access to AppDomain.
+
 namespace NLog.Internal.Fakeables
 {
     using System;
@@ -123,3 +125,4 @@ namespace NLog.Internal.Fakeables
 #endif
     }
 }
+#endif
