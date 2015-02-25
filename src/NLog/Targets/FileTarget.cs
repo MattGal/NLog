@@ -38,7 +38,9 @@ namespace NLog.Targets
     using System.ComponentModel;
     using System.Globalization;
     using System.IO;
+#if !SILVERLIGHT
     using System.IO.Compression;
+#endif
     using System.Linq;
     using System.Text;
     using System.Threading;
@@ -1606,7 +1608,11 @@ namespace NLog.Targets
             if (fileInfo.Exists)
             {
                 fileLength = fileInfo.Length;
+#if !SILVERLIGHT || ASPNETCORE
                 lastWriteTime = fileInfo.LastWriteTimeUtc;
+#else
+                lastWriteTime = fileInfo.LastWriteTime;
+#endif
                 return true;
             }
 

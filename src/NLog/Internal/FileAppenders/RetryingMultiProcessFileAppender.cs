@@ -100,7 +100,13 @@ namespace NLog.Internal.FileAppenders
             if (fi.Exists)
             {
                 fileLength = fi.Length;
+#if !SILVERLIGHT || ASPNETCORE
                 lastWriteTime = fi.LastWriteTimeUtc;
+#else
+                lastWriteTime = fi.LastWriteTime;
+#endif
+
+
                 return true;
             }
             else

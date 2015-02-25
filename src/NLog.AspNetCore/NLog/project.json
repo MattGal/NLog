@@ -1,5 +1,5 @@
 ﻿{
-    "version": "3.2.0-*",
+    "version": "3.2.1-*",
 
     // Could use more wildcards here but being explicit in case
     // new files are added.
@@ -65,7 +65,12 @@
                 "pdb": "../../../build/bin/Release/.NET Framework 4.5/NLog.pdb"
             }
         },
-        // Currently having difficulty building SL4 package, leaving it out for now.
+        "sl4": {
+            "bin": {
+                "assembly": "../../../build/bin/Release/Silverlight 4.0/NLog.dll",
+                "pdb": "../../../build/bin/Release/Silverlight 4.0/NLog.pdb"
+            }
+        },
         "sl5": {
             "bin": {
                 "assembly": "../../../build/bin/Release/Silverlight 5.0/NLog.dll",
@@ -84,6 +89,8 @@
                 "System.Globalization": "4.0.10-beta-22616",
                 "System.Globalization.Extensions": "4.0.0-beta-22620",
                 "System.IO": "4.0.10-beta-22620",
+                "System.IO.Compression": "4.0.0-beta-22624",
+                "System.IO.Compression.ZipFile": "4.0.0-beta-22624",
                 "System.IO.FileSystem": "4.0.0-beta-22620",
                 "System.Linq": "4.0.0-beta-22616",
                 "System.Net.Primitives": "4.0.10-beta-22620",

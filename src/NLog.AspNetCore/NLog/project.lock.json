@@ -2,44 +2,6 @@
   "locked": false,
   "version": 1,
   "libraries": {
-    "NLog/3.2.0": {
-      "sha": "ds+PVoblqqJDQ3XbGwwI1wcFA15UR2baUOzURoF1+eT35/zrtqtlggNpyV0JfIH5zxIwy8+1N8hqruol1Zm8HQ==",
-      "dependencySets": {
-        "Asp.NetCore,Version=v5.0": {
-          "System.Console": "4.0.0-beta-22616",
-          "System.Collections": "4.0.10-beta-22616",
-          "System.Diagnostics.Debug": "4.0.10-beta-22616",
-          "System.Diagnostics.Tools": "4.0.0-beta-22616",
-          "System.Globalization": "4.0.10-beta-22616",
-          "System.Globalization.Extensions": "4.0.0-beta-22620",
-          "System.IO": "4.0.10-beta-22620",
-          "System.IO.FileSystem": "4.0.0-beta-22620",
-          "System.Linq": "4.0.0-beta-22616",
-          "System.Net.Primitives": "4.0.10-beta-22620",
-          "System.Net.Sockets": "4.0.0-beta-22620",
-          "System.Reflection": "4.0.10-beta-22620",
-          "System.Reflection.Extensions": "4.0.0-beta-22620",
-          "System.Reflection.TypeExtensions": "4.0.0-beta-22616",
-          "System.Runtime": "4.0.20-beta-22620",
-          "System.Runtime.Extensions": "4.0.10-beta-22616",
-          "System.ServiceModel.Primitives": "4.0.0-beta-22620",
-          "System.ServiceModel.Http": "4.0.10-beta-22620",
-          "System.Text.RegularExpressions": "4.0.10-beta-22616",
-          "System.Threading": "4.0.10-beta-22616",
-          "System.Threading.Thread": "4.0.0-beta-22616",
-          "System.Threading.ThreadPool": "4.0.10-beta-22616",
-          "System.Threading.Timer": "4.0.0-beta-22616",
-          "System.Xml.XmlSerializer": "4.0.10-beta-22616"
-        }
-      },
-      "contents": {
-        "NLog.3.2.0.nupkg": {},
-        "NLog.3.2.0.nupkg.sha512": {},
-        "NLog.nuspec": {},
-        "lib\\aspnetcore50\\NLog.dll": {},
-        "lib\\aspnetcore50\\NLog.xml": {}
-      }
-    },
     "System.Collections/4.0.10-beta-22616": {
       "sha": "lP6XIPoB/FU0FrIGThfaXS6y9cYt1iy85XOArfegb2ooVJZNroHJ94nOE3ZgGJZ+d6MD6vWYgagKNsNwj76afw==",
       "dependencySets": {
@@ -186,6 +148,46 @@
         "lib\\contract\\System.IO.dll": {},
         "lib\\net45\\System.IO.dll": {},
         "lib\\portable-wpa81+wp80+win80+net45+aspnetcore50\\System.IO.dll": {}
+      }
+    },
+    "System.IO.Compression/4.0.0-beta-22624": {
+      "sha": "NVUB99UQSx9n/zda+TBTJ4mTTuR+3hqQ0yNmzhB2M6y8ql4fJeIgAlg1GL/J6NzLhWi2FgS7kMb4Uyy3cHHAKg==",
+      "dependencySets": {
+        "*": {
+          "System.IO": "4.0.0-beta-22624",
+          "System.Runtime": "4.0.0-beta-22624",
+          "System.Text.Encoding": "4.0.0-beta-22624"
+        }
+      },
+      "contents": {
+        "License.rtf": {},
+        "System.IO.Compression.4.0.0-beta-22624.nupkg": {},
+        "System.IO.Compression.4.0.0-beta-22624.nupkg.sha512": {},
+        "System.IO.Compression.nuspec": {},
+        "lib\\aspnetcore50\\System.IO.Compression.dll": {},
+        "lib\\contract\\System.IO.Compression.dll": {},
+        "lib\\net45\\_._": {},
+        "lib\\portable-wpa81+wp80+win80+net45+aspnetcore50\\System.IO.Compression.dll": {}
+      }
+    },
+    "System.IO.Compression.ZipFile/4.0.0-beta-22624": {
+      "sha": "4Sqm9kUfyQnhpsry9fBiWOPn33FNyHYFHk5Szi0QNUImZCUr1lFC7tdYq7J/4SousYsZxT8sbv42QWEQIKJlsA==",
+      "dependencySets": {
+        "*": {
+          "System.IO.Compression": "4.0.0-beta-22624",
+          "System.Runtime": "4.0.0-beta-22624",
+          "System.Text.Encoding": "4.0.0-beta-22624"
+        }
+      },
+      "contents": {
+        "License.rtf": {},
+        "System.IO.Compression.ZipFile.4.0.0-beta-22624.nupkg": {},
+        "System.IO.Compression.ZipFile.4.0.0-beta-22624.nupkg.sha512": {},
+        "System.IO.Compression.ZipFile.nuspec": {},
+        "lib\\aspnetcore50\\System.IO.Compression.ZipFile.dll": {},
+        "lib\\contract\\System.IO.Compression.ZipFile.dll": {},
+        "lib\\net45\\System.IO.Compression.ZipFile.dll": {},
+        "lib\\portable-wpa81+wp80+win80+net45+aspnetcore50\\System.IO.Compression.ZipFile.dll": {}
       }
     },
     "System.IO.FileSystem/4.0.0-beta-22620": {
